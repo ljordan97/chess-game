@@ -1,3 +1,7 @@
 import leviChess as lc
 
-lc.initPieces()
+game = lc.startGame()
+#print(game.active)
+
+while game.active:
+	game.nextTurn()
