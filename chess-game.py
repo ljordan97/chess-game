@@ -16,7 +16,7 @@ lc.pygame.init()
 size = width, height = 768, 768 #screen size
 screen = lc.pygame.display.set_mode(size) #create screen
 lc.pygame.display.set_caption('Levi\'s Chess')
-lc.pygame.mouse.set_visible(0)
+lc.pygame.mouse.set_visible(1)
 
 #load board asset
 background = lc.pygame.image.load("assets/chess_board.png")
@@ -46,6 +46,32 @@ for piece in pieces:
 	piece.rect.inflate(50,50)
 	screen.blit(piece.image, piece.rect)
 
+#white to move first
+turn = 0
+
 #main loop
 while 1:
+	#update display
 	lc.pygame.display.flip()
+
+	# get all events
+	ev = lc.pygame.event.get()
+
+	# proceed events
+	for event in ev:
+		# handle MOUSEBUTTONUP
+		if event.type == lc.pygame.MOUSEBUTTONUP:
+			pos = lc.pygame.mouse.get_pos()
+			# get a list of all sprites that are under the mouse cursor
+			clicked_sprites = [s for s in pieces if s.rect.collidepoint(pos)]
+			print(clicked_sprites)
+	# while lc.pygame.mouse.get_pressed(num_buttons=3) ==
+	if turn == 0:
+		to_move = "white"
+	elif turn == 1:
+		to_move = "black"
+	#get click
+
+	#end and toggle turn
+	turn = turn ^ 1
+		
