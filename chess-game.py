@@ -41,36 +41,58 @@ pieces.extend([lc.Piece("black", "queen", "D8", board)])
 pieces.extend([lc.Piece("white", "king", "E1", board)])
 pieces.extend([lc.Piece("black", "king", "E8", board)])
 
-#render all sprites
-for piece in pieces:
-	piece.rect.inflate(50,50)
-	screen.blit(piece.image, piece.rect)
-
 #white to move first
 turn = 0
-
+#true when a piece has been clicked already, removes need for nested loops
+piece_selected = 0
 #main loop
 while 1:
+	#render all sprites
+	for piece in pieces:
+		#piece.rect.inflate(50,50)
+		screen.blit(piece.image, piece.rect)
+
 	#update display
 	lc.pygame.display.flip()
 
-	# get all events
+	#get updated event queue
 	ev = lc.pygame.event.get()
 
-	# proceed events
+	#select piece with a click, move the piece with the next click
 	for event in ev:
-		# handle MOUSEBUTTONUP
-		if event.type == lc.pygame.MOUSEBUTTONUP:
+		#if a piece is clicked and none are currently selected
+		if event.type == lc.pygame.MOUSEBUTTONDOWN and piece_selected == 0:
+			#get click position
 			pos = lc.pygame.mouse.get_pos()
 			# get a list of all sprites that are under the mouse cursor
 			clicked_sprites = [s for s in pieces if s.rect.collidepoint(pos)]
-			print(clicked_sprites)
-	# while lc.pygame.mouse.get_pressed(num_buttons=3) ==
-	if turn == 0:
-		to_move = "white"
-	elif turn == 1:
-		to_move = "black"
-	#get click
+			if clicked_sprites:
+				#enlarge selected piece for emphasis
+				clicked_sprites[0].image = lc.pygame.transform.scale(clicked_sprites[0].image, (72, 72))
+				#next click will move the piece instead of selecting another sprite
+				piece_selected = 1
+			print("1st click selected ", clicked_sprites, piece_selected)
+
+		#if a piece has been selected and needs to move
+		elif event.type == lc.pygame.MOUSEBUTTONDOWN and piece_selected == 1:
+			#get new click pos
+			pos = lc.pygame.mouse.get_pos()
+			print(pos)
+			#update position of previously selected sprite
+			#TO DO: RESOLVE NEAREST SQUARE POSITION BEFORE MOVING
+				#also, remove the old sprite image
+			clicked_sprites[0].rect.topleft = pos
+			
+			#let another piece get selected 
+			piece_selected = 0
+			print("second click", piece_selected)
+			#erase list of clicked sprites
+			clicked_sprites = []
+			print("sprites selected after 2nd click ", clicked_sprites)
+
+	#erase queue to make way for fresh clicks
+	lc.pygame.event.clear()
+	ev = lc.pygame.event.get()
 
 	#end and toggle turn
 	turn = turn ^ 1

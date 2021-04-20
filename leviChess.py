@@ -20,10 +20,13 @@ class Piece(pygame.sprite.Sprite):
 		#move rect to proper spot
 		self.rect.topleft = self.board[self.current_square][0]
 		print("Created " + self.color + " " + self.rank + " at " + starting_square)
-
+		
 		#add piece to board dict
 		square_data = self.board[self.current_square]
 		square_data.append(self)
+
+	def __repr__(self):
+		return self.color + " " + self.rank + " " + self.current_square
 
 def init_graphics():
 	pygame.init()
