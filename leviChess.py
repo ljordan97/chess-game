@@ -1,5 +1,6 @@
 import os, sys, pygame
 from pygame.locals import *
+import math
 
 #white_pawn = Piece("white", "pawn", board, "G1")
 class Piece(pygame.sprite.Sprite):
@@ -20,7 +21,10 @@ class Piece(pygame.sprite.Sprite):
 		#move rect to proper spot
 		self.rect.topleft = self.board[self.current_square][0]
 		print("Created " + self.color + " " + self.rank + " at " + starting_square)
-		
+
+		#allow sprite to be made transparent
+		#self.image = self.image.convert_alpha()
+
 		#add piece to board dict
 		square_data = self.board[self.current_square]
 		square_data.append(self)
